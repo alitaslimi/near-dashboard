@@ -2,6 +2,8 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.subplots as sp
+import plotly.graph_objects as go
 import PIL
 
 # Global Variables
@@ -22,7 +24,9 @@ with open('style.css')as f:
 # Data Sources
 # @st.cache(ttl=600)
 def get_data(query):
-    if query == 'Transfers Overview':
+    if query == 'Prices Daily':
+        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/60300b70-dd1e-4716-bc75-3bfc5709250f/data/latest')
+    elif query == 'Transfers Overview':
         return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/748dc207-2309-4afb-8b09-9e979aa6007f/data/latest')
     elif query == 'Transfers Daily':
         return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/e4353f8e-2e61-486e-8d7f-d5bf05d9bfed/data/latest')
@@ -34,6 +38,7 @@ def get_data(query):
         return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/c1e767c2-3601-43e4-b159-f5fb8efbedfb/data/latest')
     return None
 
+prices_daily = get_data('Prices Daily')
 transfers_overview = get_data('Transfers Overview')
 transfers_daily = get_data('Transfers Daily')
 transfers_heatmap = get_data('Transfers Heatmap')
@@ -42,6 +47,14 @@ transfers_assets_daily = get_data('Transfers Assets Daily')
 
 # Content
 st.subheader('Overview')
+
+fig = sp.make_subplots(specs=[[{'secondary_y': True}]])
+fig.add_trace(go.Line(x=prices_daily['Date'], y=prices_daily['Price'], name='Price'), secondary_y=False)
+fig.add_trace(go.Bar(x=prices_daily['Date'], y=prices_daily['Change'], name='Change'), secondary_y=True)
+fig.update_layout(title_text='NEAR Price and Its Percentage Change Over Time')
+fig.update_yaxes(title_text='Price [USD]', secondary_y=False)
+fig.update_yaxes(title_text='Change [%]', secondary_y=True)
+st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
 fig = px.area(transfers_assets_daily.sort_values(['Date', 'Volume'], ascending=[True, False]), x='Date', y='Volume', color='Asset', title='Daily Transferred Volume')
 fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Volume [USD]')
@@ -52,8 +65,10 @@ fig.add_shape(type='line', x0='2022-11-10', x1='2022-11-10', y0=0, y1=1, xref='x
 st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
 # Credits
-c1, c2 = st.columns(2)
+c1, c2, c3 = st.columns(3)
 with c1:
-    st.info('**Data Analyst: [@AliTslm](https://twitter.com/AliTslm)**', icon="💻")
+    st.info('**Data Analyst: [@AliTslm](https://twitter.com/AliTslm)**', icon="💡")
 with c2:
-    st.info('**Data: [Flipside Crypto](https://flipsidecrypto.xyz/)**', icon="🧠")
+    st.info('**GitHub: [@alitaslimi](https://github.com/alitaslimi)**', icon="💻")
+with c3:
+    st.info('**Data: [Flipside Crypto](https://flipsidecrypto.xyz)**', icon="🧠")
