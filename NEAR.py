@@ -21,48 +21,44 @@ st.title('NEAR Mega Dashboard')
 with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
-# Data Sources
-# @st.cache(ttl=600)
-def get_data(query):
-    if query == 'Prices Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/60300b70-dd1e-4716-bc75-3bfc5709250f/data/latest')
-    elif query == 'Transfers Overview':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/748dc207-2309-4afb-8b09-9e979aa6007f/data/latest')
-    elif query == 'Transfers Daily':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/e4353f8e-2e61-486e-8d7f-d5bf05d9bfed/data/latest')
-    elif query == 'Transfers Heatmap':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/9135ad92-3e0c-4c07-9af8-905f204533eb/data/latest')
-    elif query == 'Transfers Assets Overview':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/c14f77c5-76be-4fc1-8e50-595462b36f64/data/latest')
-    elif query == 'Transfers Assets Daily':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/c1e767c2-3601-43e4-b159-f5fb8efbedfb/data/latest')
-    return None
-
-prices_daily = get_data('Prices Daily')
-transfers_overview = get_data('Transfers Overview')
-transfers_daily = get_data('Transfers Daily')
-transfers_heatmap = get_data('Transfers Heatmap')
-transfers_assets_overview = get_data('Transfers Assets Overview')
-transfers_assets_daily = get_data('Transfers Assets Daily')
-
 # Content
-st.subheader('Overview')
+st.subheader('Introduction')
 
-fig = sp.make_subplots(specs=[[{'secondary_y': True}]])
-fig.add_trace(go.Line(x=prices_daily['Date'], y=prices_daily['Price'], name='Price'), secondary_y=False)
-fig.add_trace(go.Bar(x=prices_daily['Date'], y=prices_daily['Change'], name='Change'), secondary_y=True)
-fig.update_layout(title_text='NEAR Price and Its Percentage Change Over Time')
-fig.update_yaxes(title_text='Price [USD]', secondary_y=False)
-fig.update_yaxes(title_text='Change [%]', secondary_y=True)
-st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+st.write(
+    """
+    [**NEAR Protocol**](https://near.org) is a sharded, proof-of-stake (PoS), layer1 blockchain
+    that is simple to use, secure and scalable. It is designed to provide the best possible
+    experience for developers and users to ultimately, facilitate the mainstream adoption of
+    decentralized applications. Unlike other blockchains, this network has been built from the
+    ground up to be the easiest in the world for both developers and their end-users while
+    still providing the scalability necessary to serve those users. It facilitates the development
+    of decentralized applications, even if developers are only used to building with traditional
+    web or app concepts. Besides, NEAR onboards users with a smooth experience, even if they
+    have never used crypto, tokens, keys, wallets, or other blockchain artifacts. It also allows
+    the application to scale seamlessly. The underlying platform automatically expands capacity
+    via sharding without additional costs or effort on your part.
 
-fig = px.area(transfers_assets_daily.sort_values(['Date', 'Volume'], ascending=[True, False]), x='Date', y='Volume', color='Asset', title='Daily Transferred Volume')
-fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Volume [USD]')
-fig.add_annotation(x='2022-05-12', y=35000000, text='Terra Collapse', showarrow=False, xanchor='left')
-fig.add_shape(type='line', x0='2022-05-12', x1='2022-05-12', y0=0, y1=1, xref='x', yref='paper', line=dict(width=1, dash='dot'))
-fig.add_annotation(x='2022-11-10', y=6000000, text='FTX Collapse', showarrow=False, xanchor='left')
-fig.add_shape(type='line', x0='2022-11-10', x1='2022-11-10', y0=0, y1=1, xref='x', yref='paper', line=dict(width=1, dash='dot'))
-st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+    NEAR is the native token of the NEAR blockchain. It is used for transaction fees, staking,
+    acquiring a validator seat, and decentralized applications. All transactions which occur on
+    the NEAR blockchain must be paid for using NEAR. Fundamental to PoS ecosystems, NEAR can be
+    delegated to validators (staked) to earn NEAR rewards. To become a validator on the NEAR
+    blockchain a minimum amount of NEAR is required. Last but not least, those building on the
+    NEAR ecosystem can choose to leverage the NEAR token in several ways expanding on its utility.
+    """
+)
+
+st.subheader('Methodology')
+
+st.write(
+    """
+    The data for this mega dashboard were selected from the [**Flipside Crypto**](https://flipsidecrypto.xyz)
+    data platform by using its **REST API**. These queries are currently set to **re-run every 24 hours** to
+    cover the latest data and are imported as a JSON file directly to each page. The code for this tool is
+    saved and accessible in its [**GitHub Repository**](https://github.com/alitaslimi/near-dashboard).
+    """
+)
+
+st.write("#")
 
 # Credits
 c1, c2, c3 = st.columns(3)
