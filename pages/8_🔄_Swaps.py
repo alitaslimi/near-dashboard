@@ -24,7 +24,7 @@ with open('style.css')as f:
 theme_plotly = None # None or streamlit
 
 # Data Sources
-# @st.cache(ttl=600)
+@st.cache(ttl=600)
 def get_data(query):
     if query == 'Swaps Overview':
         return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/18f8dc36-dc82-45ce-8ffb-563ac0122407/data/latest')

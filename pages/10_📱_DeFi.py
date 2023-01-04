@@ -8,7 +8,6 @@ import PIL
 
 # Global Variables
 theme_plotly = None # None or streamlit
-week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 # Page Favicon
 favicon = PIL.Image.open('favicon.png')
@@ -22,7 +21,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-# @st.cache(ttl=600)
+@st.cache(ttl=600)
 def get_data(query):
     if query == 'Burrow Netflow':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/215ed4b5-e745-42f9-be3c-87b724ffa22a/data/latest')

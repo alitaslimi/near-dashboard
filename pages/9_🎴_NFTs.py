@@ -22,7 +22,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-# @st.cache(ttl=600)
+@st.cache(ttl=600)
 def get_data(query):
     if query == 'NFTs Overview':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/90bb096b-e1eb-4b6b-9aab-d74a6d1cf0e8/data/latest')

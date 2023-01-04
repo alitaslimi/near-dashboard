@@ -22,9 +22,11 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-# @st.cache(ttl=600)
+@st.cache(ttl=600)
 def get_data(query):
-    if query == 'Blocks Overview':
+    if query == 'Prices Daily':
+        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/60300b70-dd1e-4716-bc75-3bfc5709250f/data/latest')
+    elif query == 'Blocks Overview':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/024b2e03-1063-4bcf-a8de-b35d17e01cbd/data/latest')
     elif query == 'Blocks Daily':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/1d55b381-77a7-4e03-b951-58421139cb09/data/latest')
@@ -40,6 +42,7 @@ def get_data(query):
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/1979b40a-c981-486f-a4b6-ca774cc835f5/data/latest')
     return None
 
+prices_daily = get_data('Prices Daily')
 blocks_overview = get_data('Blocks Overview')
 blocks_daily = get_data('Blocks Daily')
 transactions_overview = get_data('Transactions Overview')
@@ -49,7 +52,7 @@ transactions_status_overview = get_data('Transactions Status Overview')
 transactions_status_daily = get_data('Transactions Status Daily')
 
 # Content
-tab_overview, tab_heatmap, tab_status = st.tabs(['**Overview**', '**Heatmap**', '**Status**'])
+tab_overview, tab_heatmap, tab_status = st.tabs(['**Overview**', '**Heatmap**', '**Success Rate**'])
 
 with tab_overview:
     
@@ -71,22 +74,35 @@ with tab_overview:
     interval = st.radio('**Time Interval**', ['Daily', 'Weekly', 'Monthly'], key='transactions_interval', horizontal=True)
 
     if st.session_state.transactions_interval == 'Daily':
+        price_over_time = prices_daily
         blocks_over_time = blocks_daily
         transactions_over_time = transactions_daily
     elif st.session_state.transactions_interval == 'Weekly':
+        price_over_time = prices_daily
+        price_over_time = price_over_time.groupby([pd.Grouper(freq='W', key='Date')]).agg('mean').reset_index()
         blocks_over_time = blocks_daily
-        transactions_over_time = transactions_daily
         blocks_over_time = blocks_over_time.groupby([pd.Grouper(freq='W', key='Date')]).agg(
             {'Blocks': 'sum', 'Transactions': 'sum', 'Validators': 'sum', 'BlockTime': 'mean'}).reset_index()
+        transactions_over_time = transactions_daily
         transactions_over_time = transactions_over_time.groupby([pd.Grouper(freq='W', key='Date')]).agg(
             {'Blocks': 'sum', 'Transactions': 'sum', 'Users': 'sum', 'TPS': 'mean'}).reset_index()
     elif st.session_state.transactions_interval == 'Monthly':
+        price_over_time = prices_daily
+        price_over_time = price_over_time.groupby([pd.Grouper(freq='M', key='Date')]).agg('mean').reset_index()
         blocks_over_time = blocks_daily
-        transactions_over_time = transactions_daily
         blocks_over_time = blocks_over_time.groupby([pd.Grouper(freq='M', key='Date')]).agg(
             {'Blocks': 'sum', 'Transactions': 'sum', 'Validators': 'sum', 'BlockTime': 'mean'}).reset_index()
+        transactions_over_time = transactions_daily
         transactions_over_time = transactions_over_time.groupby([pd.Grouper(freq='M', key='Date')]).agg(
             {'Blocks': 'sum', 'Transactions': 'sum', 'Users': 'sum', 'TPS': 'mean'}).reset_index()
+
+    fig = sp.make_subplots(specs=[[{'secondary_y': True}]])
+    fig.add_trace(go.Line(x=prices_daily['Date'], y=prices_daily['Price'], name='Price'), secondary_y=False)
+    fig.add_trace(go.Bar(x=prices_daily['Date'], y=prices_daily['Change'], name='Change'), secondary_y=True)
+    fig.update_layout(title_text='NEAR Price and Its Percentage Change Over Time')
+    fig.update_yaxes(title_text='Price [USD]', secondary_y=False)
+    fig.update_yaxes(title_text='Change [%]', secondary_y=True)
+    st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
     fig = sp.make_subplots(specs=[[{'secondary_y': True}]])
     fig.add_trace(go.Line(x=blocks_over_time['Date'], y=blocks_over_time['Blocks'], name='Blocks'), secondary_y=False)
@@ -108,6 +124,10 @@ with tab_overview:
     fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title=None)
     fig.add_annotation(x='2022-09-13', y=200000, text='SWEAT', showarrow=False, xanchor='left')
     fig.add_shape(type='line', x0='2022-09-13', x1='2022-09-13', y0=0, y1=1, xref='x', yref='paper', line=dict(width=1, dash='dot'))
+    fig.add_annotation(x='2022-05-12', y=200000, text='Terra Collapse', showarrow=False, xanchor='left')
+    fig.add_shape(type='line', x0='2022-05-12', x1='2022-05-12', y0=0, y1=1, xref='x', yref='paper', line=dict(width=1, dash='dot'))
+    fig.add_annotation(x='2022-11-10', y=200000, text='FTX Collapse', showarrow=False, xanchor='left')
+    fig.add_shape(type='line', x0='2022-11-10', x1='2022-11-10', y0=0, y1=1, xref='x', yref='paper', line=dict(width=1, dash='dot'))
     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
 with tab_heatmap:
