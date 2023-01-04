@@ -1,14 +1,6 @@
 # Libraries
 import streamlit as st
-import pandas as pd
-import plotly.express as px
-import plotly.subplots as sp
-import plotly.graph_objects as go
 import PIL
-
-# Global Variables
-theme_plotly = None # None or streamlit
-week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 # Page Favicon
 favicon = PIL.Image.open('favicon.png')
@@ -55,6 +47,11 @@ st.write(
     data platform by using its **REST API**. These queries are currently set to **re-run every 24 hours** to
     cover the latest data and are imported as a JSON file directly to each page. The code for this tool is
     saved and accessible in its [**GitHub Repository**](https://github.com/alitaslimi/near-dashboard).
+
+    This mega dashboard is designed and structured in multiple **Pages** that are accessible using the sidebar.
+    Each of these Pages addresses a different segment of the NEAR ecosystem. By browsing each page
+    (Macro, Transfers, Swaps, NFTs, etc.) you are able to dive deeper into each secotr of the NEAR's
+    network.
     """
 )
 
