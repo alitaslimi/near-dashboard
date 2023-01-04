@@ -52,6 +52,9 @@ st.write(
     Each of these Pages addresses a different segment of the NEAR ecosystem. By browsing each page
     (Macro, Transfers, Swaps, NFTs, etc.) you are able to dive deeper into each secotr of the NEAR's
     network.
+
+    All the metrics, except the NEAR wallet balances, have been calculated since the **start of 2022**. Links
+    to the data **queries** are available in the GitHub repository of this tool. 
     """
 )
 
