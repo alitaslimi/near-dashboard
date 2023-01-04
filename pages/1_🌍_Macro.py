@@ -22,7 +22,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=600)
+@st.cache(ttl=3600)
 def get_data(query):
     if query == 'Prices Daily':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/60300b70-dd1e-4716-bc75-3bfc5709250f/data/latest')

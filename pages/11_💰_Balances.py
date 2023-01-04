@@ -21,7 +21,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=600)
+@st.cache(ttl=3600)
 def get_data(query):
     if query == 'Wallet Balances Distribution':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/eee5e19b-2632-4fec-b337-e52d85509eb5/data/latest')

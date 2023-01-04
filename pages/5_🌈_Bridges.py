@@ -21,7 +21,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=600)
+@st.cache(ttl=3600)
 def get_data(query):
     if query == 'Bridges Overview':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/4e31e12c-bf4e-40c7-b81b-68927d9d537a/data/latest')
