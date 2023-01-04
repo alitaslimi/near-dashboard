@@ -13,8 +13,8 @@ theme_plotly = None # None or streamlit
 favicon = PIL.Image.open('favicon.png')
 
 # Layout
-st.set_page_config(page_title='DeFi - NEAR Mega Dashboard', page_icon=favicon, layout='wide')
-st.title('📱 DeFi')
+st.set_page_config(page_title='Lending - NEAR Mega Dashboard', page_icon=favicon, layout='wide')
+st.title('📒 Lending')
 
 # Style
 with open('style.css')as f:
@@ -41,12 +41,7 @@ burrow_daily = get_data('Burrow Daily')
 burrow_liquidity_overview = get_data('Burrow Liquidity Overview')
 burrow_liquidity_daily = get_data('Burrow Liquidity Daily')
 
-# Content
-# tab_burrow, tab_sweat = st.tabs(['**Burrow**', '**Sweatcoin**'])
-
-# with tab_burrow:
-
-st.subheader("Burrow's Lending Overview")
+st.subheader('Overview of Burrow')
 
 c1, c2, c3 = st.columns(3)
 with c1:
@@ -163,8 +158,3 @@ fig = px.bar(actions_over_time, x='Date', y='Users', color='Action', custom_data
 fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Users', hovermode='x unified')
 fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
 st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
-
-# with tab_sweat:
-
-#     st.subheader('Overview')
-    
