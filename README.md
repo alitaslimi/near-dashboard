@@ -8,7 +8,7 @@ Here are the links to the queries used for this dashboard:
 - [Validators](https://next.flipsidecrypto.xyz/edit/queries/6a80300f-3a83-4be7-a701-9f3081535fba)
 - [Staking](https://next.flipsidecrypto.xyz/edit/queries/a07278ef-5126-4642-9694-fd374000d5b1)
 - [Contracts](https://next.flipsidecrypto.xyz/edit/queries/6eb672c4-e52a-43c1-822f-a1e43cb52b10)
-- [Bridges](https://next.flipsidecrypto.xyz/edit/queries/4e31e12c-bf4e-40c7-b81b-68927d9d537a) Credit to Pinehearst for bridges from Aurora -> NEAR
+- [Bridges](https://next.flipsidecrypto.xyz/edit/queries/4e31e12c-bf4e-40c7-b81b-68927d9d537a)
 - [Transfers](https://next.flipsidecrypto.xyz/edit/queries/748dc207-2309-4afb-8b09-9e979aa6007f)
 - [CEXs](https://next.flipsidecrypto.xyz/edit/queries/3c4330b0-36d2-4016-a092-1fb72b414f80)
 - [Swaps](https://next.flipsidecrypto.xyz/edit/queries/18f8dc36-dc82-45ce-8ffb-563ac0122407)
