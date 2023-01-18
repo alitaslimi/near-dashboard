@@ -22,7 +22,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=3600)
+@st.cache(ttl=1000, allow_output_mutation=True)
 def get_data(query):
     if query == 'NFTs Overview':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/90bb096b-e1eb-4b6b-9aab-d74a6d1cf0e8/data/latest')
@@ -102,7 +102,7 @@ with tab_overview:
                 'PriceAverage': 'mean', 'PriceMedian': 'mean', 'PriceMax': 'mean', 'PriceFloor': 'mean'}).reset_index()
     elif st.session_state.nfts_interval == 'Monthly':
         df = nfts_daily
-        df = nfts_daily.groupby([pd.Grouper(freq='M', key='Date')]).agg(
+        df = nfts_daily.groupby([pd.Grouper(freq='MS', key='Date')]).agg(
             {'Sales': 'sum', 'Buyers': 'sum', 'Volume': 'sum', 'NFTs': 'sum', 'Collections': 'sum',
                 'PriceAverage': 'mean', 'PriceMedian': 'mean', 'PriceMax': 'mean', 'PriceFloor': 'mean'}).reset_index()
 
@@ -283,7 +283,7 @@ with tab_marketplaces:
                 'PriceAverage': 'mean', 'PriceMedian': 'mean', 'PriceMax': 'mean', 'PriceFloor': 'mean'}).reset_index()
     elif st.session_state.marketplaces_interval == 'Monthly':
         df = nfts_marketplaces_daily
-        df = df.groupby([pd.Grouper(freq='M', key='Date'), 'Marketplace']).agg(
+        df = df.groupby([pd.Grouper(freq='MS', key='Date'), 'Marketplace']).agg(
             {'Sales': 'sum', 'Buyers': 'sum', 'NFTs': 'sum', 'Collections': 'sum', 'Volume': 'sum',
                 'PriceAverage': 'mean', 'PriceMedian': 'mean', 'PriceMax': 'mean', 'PriceFloor': 'mean'}).reset_index()
         df['RowNumber'] = df.groupby('Date')['Volume'].rank(method='max', ascending=False)
@@ -501,7 +501,7 @@ with tab_collections:
                 'PriceAverage': 'mean', 'PriceMedian': 'mean', 'PriceMax': 'mean', 'PriceFloor': 'mean'}).reset_index()
     elif st.session_state.collections_interval == 'Monthly':
         df = nfts_collections_daily
-        df = df.groupby([pd.Grouper(freq='M', key='Date'), 'Collection']).agg(
+        df = df.groupby([pd.Grouper(freq='MS', key='Date'), 'Collection']).agg(
             {'Sales': 'sum', 'Buyers': 'sum', 'NFTs': 'sum', 'Volume': 'sum',
                 'PriceAverage': 'mean', 'PriceMedian': 'mean', 'PriceMax': 'mean', 'PriceFloor': 'mean'}).reset_index()
         df['RowNumber'] = df.groupby('Date')['Volume'].rank(method='max', ascending=False)

@@ -19,7 +19,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=3600)
+@st.cache(ttl=1000, allow_output_mutation=True)
 def get_data(query):
     if query == 'Contracts Overview':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/6eb672c4-e52a-43c1-822f-a1e43cb52b10/data/latest')
@@ -78,9 +78,9 @@ elif st.session_state.burrow_interval == 'Weekly':
     df = df.groupby(['Date', 'Contract']).agg('sum').reset_index()
 elif st.session_state.burrow_interval == 'Monthly':
     contracts_over_time = contracts_daily
-    contracts_over_time = contracts_over_time.groupby([pd.Grouper(freq='M', key='Date')]).agg('sum').reset_index()
+    contracts_over_time = contracts_over_time.groupby([pd.Grouper(freq='MS', key='Date')]).agg('sum').reset_index()
     df = contracts_interactions_daily
-    df = df.groupby([pd.Grouper(freq='M', key='Date'), 'Contract']).agg('sum').reset_index()
+    df = df.groupby([pd.Grouper(freq='MS', key='Date'), 'Contract']).agg('sum').reset_index()
     df['RowNumber'] = df.groupby('Date')['Transactions'].rank(method='max', ascending=False)
     df.loc[df['RowNumber'] > 5, 'Contract'] = 'Other'
     df = df.groupby(['Date', 'Contract']).agg('sum').reset_index()

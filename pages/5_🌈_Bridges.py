@@ -21,7 +21,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=3600)
+@st.cache(ttl=1000, allow_output_mutation=True)
 def get_data(query):
     if query == 'Bridges Overview':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/4e31e12c-bf4e-40c7-b81b-68927d9d537a/data/latest')
@@ -46,7 +46,6 @@ with tab_overview:
     st.subheader('Overview of Rainbow Bridge')
 
     df = bridges_overview.sum().reset_index()
-    print(df)
     c1, c2, c3 = st.columns(3)
     with c1:
         st.metric(label='**Total Bridged Volume**', value=str(df.loc[df['index'] == 'Volume', 0].map('{:,.0f}'.format).values[0]), help='USD')
@@ -82,7 +81,7 @@ with tab_overview:
         bridges_over_time = bridges_over_time.groupby([pd.Grouper(freq='W', key='Date'), 'Bridge']).agg('sum').reset_index()
     elif st.session_state.bridges_interval == 'Monthly':
         bridges_over_time = bridges_daily
-        bridges_over_time = bridges_over_time.groupby([pd.Grouper(freq='M', key='Date'), 'Bridge']).agg('sum').reset_index()
+        bridges_over_time = bridges_over_time.groupby([pd.Grouper(freq='MS', key='Date'), 'Bridge']).agg('sum').reset_index()
 
     fig = px.line(bridges_over_time, x='Date', y='Volume', color='Bridge', custom_data=['Bridge'], title='Bridged Volume Over Time')
     fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Volume [USD]', hovermode='x unified')
@@ -144,7 +143,7 @@ with tab_tokens:
         df = df.groupby(['Date', 'Token']).agg('sum').reset_index()
     elif st.session_state.tokens_interval == 'Monthly':
         df = bridges_tokens_daily
-        df = df.groupby([pd.Grouper(freq='M', key='Date'), 'Token']).agg('sum').reset_index()
+        df = df.groupby([pd.Grouper(freq='MS', key='Date'), 'Token']).agg('sum').reset_index()
         df['RowNumber'] = df.groupby('Date')['Volume'].rank(method='max', ascending=False)
         df.loc[df['RowNumber'] > 5, 'Token'] = 'Other'
         df = df.groupby(['Date', 'Token']).agg('sum').reset_index()

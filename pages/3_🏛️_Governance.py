@@ -21,7 +21,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=3600)
+@st.cache(ttl=1000, allow_output_mutation=True)
 def get_data(query):
     if query == 'Blocks Overview':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/024b2e03-1063-4bcf-a8de-b35d17e01cbd/data/latest')
@@ -96,10 +96,10 @@ with tab_validators:
         df = df.groupby(['Date', 'Validator']).agg({'Blocks': 'sum', 'Transactions': 'sum'}).reset_index()
     elif st.session_state.validators_interval == 'Monthly':
         blocks_over_time = blocks_daily
-        blocks_over_time = blocks_over_time.groupby([pd.Grouper(freq='M', key='Date')]).agg(
+        blocks_over_time = blocks_over_time.groupby([pd.Grouper(freq='MS', key='Date')]).agg(
             {'Blocks': 'sum', 'Transactions': 'sum', 'Validators': 'sum', 'BlockTime': 'mean'}).reset_index()
         df = validators_daily
-        df = df.groupby([pd.Grouper(freq='M', key='Date'), 'Validator']).agg({'Blocks': 'sum', 'Transactions': 'sum'}).reset_index()
+        df = df.groupby([pd.Grouper(freq='MS', key='Date'), 'Validator']).agg({'Blocks': 'sum', 'Transactions': 'sum'}).reset_index()
         df['RowNumber'] = df.groupby('Date')['Blocks'].rank(method='max', ascending=False)
         df.loc[df['RowNumber'] > 5, 'Validator'] = 'Other'
         df = df.groupby(['Date', 'Validator']).agg({'Blocks': 'sum', 'Transactions': 'sum'}).reset_index()

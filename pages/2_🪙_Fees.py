@@ -22,7 +22,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=3600)
+@st.cache(ttl=1000, allow_output_mutation=True)
 def get_data(query):
     if query == 'Transactions Overview':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/3479cc40-da43-4231-b8e8-c5e62974720d/data/latest')
@@ -70,7 +70,7 @@ with tab_overview:
                 'Gas': 'sum', 'GasAverage': 'mean', 'GasMedian': 'mean', 'Gas/Block': 'mean'}).reset_index()
     elif st.session_state.fees_interval == 'Monthly':
         transactions_over_time = transactions_daily
-        transactions_over_time = transactions_over_time.groupby([pd.Grouper(freq='M', key='Date')]).agg(
+        transactions_over_time = transactions_over_time.groupby([pd.Grouper(freq='MS', key='Date')]).agg(
             {'Fees': 'sum', 'FeeAverage': 'mean', 'FeeMedian': 'mean', 'Fees/Block': 'mean',
                 'Gas': 'sum', 'GasAverage': 'mean', 'GasMedian': 'mean', 'Gas/Block': 'mean'}).reset_index()
 

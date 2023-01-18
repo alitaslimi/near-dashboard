@@ -19,7 +19,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=3600)
+@st.cache(ttl=1000, allow_output_mutation=True)
 def get_data(query):
     if query == 'CEXs Overview':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/3c4330b0-36d2-4016-a092-1fb72b414f80/data/latest')
@@ -103,9 +103,9 @@ elif st.session_state.cexs_interval == 'Weekly':
     dfo = dfo.groupby([pd.Grouper(freq='W', key='Date'), 'CEX']).agg({'Transactions': 'sum', 'Users': 'sum', 'Volume': 'sum'}).reset_index()
 elif st.session_state.cexs_interval == 'Monthly':
     dfi = cexs_exchanges_daily.query("Flow == 'Inflow'")
-    dfi = dfi.groupby([pd.Grouper(freq='M', key='Date'), 'CEX']).agg({'Transactions': 'sum', 'Users': 'sum', 'Volume': 'sum'}).reset_index()
+    dfi = dfi.groupby([pd.Grouper(freq='MS', key='Date'), 'CEX']).agg({'Transactions': 'sum', 'Users': 'sum', 'Volume': 'sum'}).reset_index()
     dfo = cexs_exchanges_daily.query("Flow == 'Outflow'")
-    dfo = dfo.groupby([pd.Grouper(freq='M', key='Date'), 'CEX']).agg({'Transactions': 'sum', 'Users': 'sum', 'Volume': 'sum'}).reset_index()
+    dfo = dfo.groupby([pd.Grouper(freq='MS', key='Date'), 'CEX']).agg({'Transactions': 'sum', 'Users': 'sum', 'Volume': 'sum'}).reset_index()
 
 c1, c2 = st.columns(2)
 with c1:

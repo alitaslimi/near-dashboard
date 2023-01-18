@@ -21,7 +21,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=3600)
+@st.cache(ttl=1000, allow_output_mutation=True)
 def get_data(query):
     if query == 'Burrow Netflow':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/215ed4b5-e745-42f9-be3c-87b724ffa22a/data/latest')
@@ -135,7 +135,7 @@ elif st.session_state.burrow_interval == 'Weekly':
     burrow_liquidity_over_time = burrow_liquidity_over_time.groupby([pd.Grouper(freq='W', key='Date'), 'Token']).agg('sum').reset_index()
 elif st.session_state.burrow_interval == 'Monthly':
     actions_over_time = burrow_daily
-    actions_over_time = actions_over_time.groupby([pd.Grouper(freq='M', key='Date'), 'Action']).agg('sum').reset_index()
+    actions_over_time = actions_over_time.groupby([pd.Grouper(freq='MS', key='Date'), 'Action']).agg('sum').reset_index()
     burrow_liquidity_over_time = burrow_liquidity_daily
     burrow_liquidity_over_time = burrow_liquidity_over_time.groupby([pd.Grouper(freq='M', key='Date'), 'Token']).agg('sum').reset_index()
 

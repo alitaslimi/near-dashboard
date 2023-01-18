@@ -24,7 +24,7 @@ with open('style.css')as f:
 theme_plotly = None # None or streamlit
 
 # Data Sources
-@st.cache(ttl=3600)
+@st.cache(ttl=1000, allow_output_mutation=True)
 def get_data(query):
     if query == 'Swaps Overview':
         return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/18f8dc36-dc82-45ce-8ffb-563ac0122407/data/latest')
@@ -96,7 +96,7 @@ with tab_overview:
                 'AmountMedian': 'mean', 'Swaps/Swapper': 'mean', 'Volume/Swapper': 'mean'}).reset_index()
     elif st.session_state.swaps_interval == 'Monthly':
         swaps_over_time = swaps_daily
-        swaps_over_time = swaps_daily.groupby([pd.Grouper(freq='M', key='Date')]).agg(
+        swaps_over_time = swaps_daily.groupby([pd.Grouper(freq='MS', key='Date')]).agg(
             {'Swaps': 'sum', 'Swappers': 'sum', 'Volume': 'sum', 'AmountAverage': 'mean',
                 'AmountMedian': 'mean', 'Swaps/Swapper': 'mean', 'Volume/Swapper': 'mean'}).reset_index()
 
@@ -265,7 +265,7 @@ with tab_dexs:
             'AmountAverage': 'mean', 'AmountMedian': 'mean', 'Swaps/Swapper': 'mean', 'Volume/Swapper': 'mean'}).reset_index()
     elif st.session_state.dexs_interval == 'Monthly':
         df = swaps_dexs_daily
-        df = df.groupby([pd.Grouper(freq='M', key='Date'), 'DEX']).agg({'Swaps': 'sum', 'Swappers': 'sum', 'Volume': 'sum',
+        df = df.groupby([pd.Grouper(freq='MS', key='Date'), 'DEX']).agg({'Swaps': 'sum', 'Swappers': 'sum', 'Volume': 'sum',
             'AmountAverage': 'mean', 'AmountMedian': 'mean', 'Swaps/Swapper': 'mean', 'Volume/Swapper': 'mean'}).reset_index()
         df['RowNumber'] = df.groupby('Date')['Volume'].rank(method='max', ascending=False)
         df.loc[df['RowNumber'] > 3, 'DEX'] = 'Other'
@@ -420,7 +420,7 @@ with tab_asset_types:
                 'AmountMedian': 'mean', 'Swaps/Swapper': 'mean', 'Volume/Swapper': 'mean'}).reset_index()
     elif st.session_state.asset_types_interval == 'Monthly':
         df = swaps_asset_types_daily
-        df = swaps_asset_types_daily.groupby([pd.Grouper(freq='M', key='Date'), 'Type']).agg(
+        df = swaps_asset_types_daily.groupby([pd.Grouper(freq='MS', key='Date'), 'Type']).agg(
             {'Swaps': 'sum', 'Swappers': 'sum', 'Volume': 'sum', 'AmountAverage': 'mean',
                 'AmountMedian': 'mean', 'Swaps/Swapper': 'mean', 'Volume/Swapper': 'mean'}).reset_index()
 
@@ -609,7 +609,7 @@ with tab_assets:
             'AmountAverage': 'mean', 'AmountMedian': 'mean', 'Swaps/Swapper': 'mean', 'Volume/Swapper': 'mean'}).reset_index()
     elif st.session_state.assets_interval == 'Monthly':
         df = swaps_assets_daily
-        df = df.groupby([pd.Grouper(freq='M', key='Date'), 'Asset']).agg({'Swaps': 'sum', 'Swappers': 'sum', 'Volume': 'sum',
+        df = df.groupby([pd.Grouper(freq='MS', key='Date'), 'Asset']).agg({'Swaps': 'sum', 'Swappers': 'sum', 'Volume': 'sum',
             'AmountAverage': 'mean', 'AmountMedian': 'mean', 'Swaps/Swapper': 'mean', 'Volume/Swapper': 'mean'}).reset_index()
         df['RowNumber'] = df.groupby('Date')['Volume'].rank(method='max', ascending=False)
         df.loc[df['RowNumber'] > 3, 'Asset'] = 'Other'
