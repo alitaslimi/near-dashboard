@@ -47,6 +47,10 @@ def get_data(query):
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/5ee7ec79-e65f-4b6b-bed6-2376a27ba3b0/data/latest')
     elif query == 'Associations Monthly':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/77960b92-ea71-4d81-894d-69c5bf27b7f3/data/latest')
+    elif query == 'Contributions Overview':
+        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/836fb799-c6e4-4b45-965c-2b52eed754f5/data/latest')
+    elif query == 'Contributions Monthly':
+        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/d5b2c0c8-3152-4383-805a-4ca9594ac7a6/data/latest')
     return None
 
 developers_overview = get_data('Developers Overview')
@@ -61,6 +65,8 @@ associations_overview = get_data('Associations Overview')
 associations_daily = get_data('Associations Daily')
 associations_weekly = get_data('Associations Weekly')
 associations_monthly = get_data('Associations Monthly')
+contributions_overview = get_data('Contributions Overview')
+contributions_monthly = get_data('Contributions Monthly')
 
 # Content
 st.write(
@@ -90,7 +96,7 @@ with st.expander('**Methodology**'):
         """
     )
 
-tab_overview, tab_associations = st.tabs(['**Overview**', '**Associations**'])
+tab_overview, tab_associations, tab_contributions = st.tabs(['**Overview**', '**Associations**', '**Contributions**'])
 
 with tab_overview:
     st.subheader('Overview')
@@ -194,6 +200,46 @@ with tab_associations:
     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
     fig = px.line(df, x='Date', y='Commits', color='Association', custom_data=['Association'], title='Total Number of Commits by Association Type Over Time')
+    fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Commits', hovermode='x unified')
+    fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
+    st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+
+with tab_contributions:
+    st.subheader('Overview')
+
+    c1, c2, c3 = st.columns(3)
+    df = contributions_overview
+    with c1:
+        fig = px.pie(df, values='Developers', names='Contribution', title='Share of Developers', hole=0.4)
+        fig.update_layout(legend_title=None, legend_y=0.5)
+        fig.update_traces(textinfo='percent+label', textposition='inside')
+        st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+    with c2:
+        fig = px.pie(df, values='Repositories', names='Contribution', title='Share of Repositories', hole=0.4)
+        fig.update_layout(legend_title=None, legend_y=0.5)
+        fig.update_traces(textinfo='percent+label', textposition='inside')
+        st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+    with c3:
+        fig = px.pie(df, values='Commits', names='Contribution', title='Share of Commits', hole=0.4)
+        fig.update_layout(legend_title=None, legend_y=0.5)
+        fig.update_traces(textinfo='percent+label', textposition='inside')
+        st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+
+    st.subheader('Activity Over Time')
+
+    df = contributions_monthly
+
+    fig = px.line(df, x='Date', y='Developers', color='Contribution', custom_data=['Contribution'], title='Total Number of Developers by Contribution Type Over Time')
+    fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Developers', hovermode='x unified')
+    fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
+    st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+
+    fig = px.line(df, x='Date', y='Repositories', color='Contribution', custom_data=['Contribution'], title='Total Number of Repositories by Contribution Type Over Time')
+    fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Repositories', hovermode='x unified')
+    fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
+    st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+
+    fig = px.line(df, x='Date', y='Commits', color='Contribution', custom_data=['Contribution'], title='Total Number of Commits by Contribution Type Over Time')
     fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Commits', hovermode='x unified')
     fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
