@@ -21,7 +21,7 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-# @st.cache(ttl=1000, allow_output_mutation=True)
+@st.cache(ttl=1000, allow_output_mutation=True)
 def get_data(query):
     if query == 'Developers Overview':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/785522fc-11fd-4653-ba4c-59d97de43fac/data/latest')
@@ -258,10 +258,10 @@ st.write(
     decrease over the months leading to the end of the year. The number of new developers
     has decreased to one-third compared to mid-2022 which shows the lack of interest in this blockchain.
     The number of commits has also decreased since the fall of 2022. The majority of developers have
-    only committed once to a repository and less than 10% of the total developers count are
-    full-time contributors. The decrease in the number of full-time developers and increase in
-    the number of part-time developers during the final months of 2022 has also been an indication
-    that most of the projects either slowed down their progression speed or started to halt
-    their operations completely.
+    only committed once to a repository and less than 3% of the total developers count are
+    full-time contributors. While the number of both full-time and part-time developers has remained
+    relatively the same over the final months of 2022, the decrease in one-time developers has
+    also been an indication of a lack of interest for new developers to contribute and involve in the
+    development of the NEAR ecosystem.
     """
 )
