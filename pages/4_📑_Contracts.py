@@ -43,7 +43,6 @@ st.metric(label='**Total Deployed Contracts**', value=str(contracts_overview['Co
 
 st.subheader('Interactions')
 
-
 c1, c2 = st.columns(2)
 with c1:
     df = contracts_interactions_overview.sort_values('Transactions', ascending=False).head(20)
