@@ -103,7 +103,7 @@ with tab_overview:
     with c3:
         st.metric(label='**Total Repositories**', value=str(developers_overview['Repositories'].map('{:,.0f}'.format).values[0]))
     with c4:
-        st.metric(label='**Total Pulls**', value=str(developers_overview['Pulls'].map('{:,.0f}'.format).values[0]))
+        st.metric(label='**Total Commits**', value=str(developers_overview['Commits'].map('{:,.0f}'.format).values[0]))
 
     st.subheader('State of Pull Requests')
 
@@ -120,7 +120,7 @@ with tab_overview:
         fig.update_traces(textinfo='percent+label', textposition='inside')
         st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
     with c3:
-        fig = px.pie(df, values='Pulls', names='State', title='Share of Pulls', hole=0.4)
+        fig = px.pie(df, values='Commits', names='State', title='Share of Commits', hole=0.4)
         fig.update_layout(legend_title=None, legend_y=0.5)
         fig.update_traces(textinfo='percent+label', textposition='inside')
         st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
@@ -140,15 +140,15 @@ with tab_overview:
         new_df = new_developers_monthly
 
     fig = sp.make_subplots()
-    fig.add_trace(go.Bar(x=df['Date'], y=df['Pulls'], name='Pulls'))
+    fig.add_trace(go.Bar(x=df['Date'], y=df['Commits'], name='Commits'))
     fig.add_trace(go.Line(x=df['Date'], y=df['Repositories'].round(), name='Repositories'))
-    fig.update_layout(title_text='Total Number of Pulls and Repositories Over Time', yaxis_title='Numbers', hovermode='x unified')
+    fig.update_layout(title_text='Total Number of Commits and Repositories Over Time', yaxis_title='Numbers', hovermode='x unified')
     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
     fig = sp.make_subplots()
     fig.add_trace(go.Bar(x=df['Date'], y=df['Developers'].round(), name='Active Developers'))
     fig.add_trace(go.Line(x=new_df['Date'], y=new_df['NewDevelopers'].round(), name='New Developers'))
-    fig.update_layout(title_text='Total Number of New and Active Developers Over Time', yaxis_title='Numbers', hovermode='x unified')
+    fig.update_layout(title_text='Total Number of Active and New Developers Over Time', yaxis_title='Numbers', hovermode='x unified')
     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
 with tab_associations:
@@ -167,7 +167,7 @@ with tab_associations:
         fig.update_traces(textinfo='percent+label', textposition='inside')
         st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
     with c3:
-        fig = px.pie(df, values='Pulls', names='Association', title='Share of Pulls', hole=0.4)
+        fig = px.pie(df, values='Commits', names='Association', title='Share of Commits', hole=0.4)
         fig.update_layout(legend_title=None, legend_y=0.5)
         fig.update_traces(textinfo='percent+label', textposition='inside')
         st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
@@ -193,7 +193,7 @@ with tab_associations:
     fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
-    fig = px.line(df, x='Date', y='Pulls', color='Association', custom_data=['Association'], title='Total Number of Pulls by Association Type Over Time')
-    fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Pulls', hovermode='x unified')
+    fig = px.line(df, x='Date', y='Commits', color='Association', custom_data=['Association'], title='Total Number of Commits by Association Type Over Time')
+    fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Commits', hovermode='x unified')
     fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
