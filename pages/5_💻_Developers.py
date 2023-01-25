@@ -93,6 +93,13 @@ with st.expander('**Methodology**'):
         The code for this report is saved and accessible in the **pages** directory of its
         [**GitHub Repository**](https://github.com/alitaslimi/near-dashboard). The links to the SQL queries
         are all available on the repo's main page.
+
+        **Definitions:**
+        - **Active Developers:** Those who commit a pull request at least once per selected interval;
+        - **New Developers:** Those who commit a pull request for the first time over the selected interval;
+        - **Full-Time Developers:** Those who commit at least 10 days each month;
+        - **Part-Time Developers:** Those who commit more than once and less than 10 days each month;
+        - **One-Time Developers:** Those who commit on only one day each month.
         """
     )
 
@@ -243,3 +250,18 @@ with tab_contributions:
     fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Commits', hovermode='x unified')
     fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+
+st.subheader('Conclusion')
+st.write(
+    """
+    As the data suggested, the developer activity has stagnated over 2022 and it started to
+    decrease over the months leading to the end of the year. The number of new developers
+    has decreased to one-third compared to mid-2022 which shows the lack of interest in this blockchain.
+    The number of commits has also decreased since the fall of 2022. The majority of developers have
+    only committed once to a repository and less than 10% of the total developers count are
+    full-time contributors. The decrease in the number of full-time developers and increase in
+    the number of part-time developers during the final months of 2022 has also been an indication
+    that most of the projects either slowed down their progression speed or started to halt
+    their operations completely.
+    """
+)
