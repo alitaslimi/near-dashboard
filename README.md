@@ -1,7 +1,9 @@
 # NEAR Mega Dashboard
 This [NEAR Protocol Mega Dashboard](https://alitaslimi-near.streamlit.app) was originally created for [MetricsDAO](https://metricsdao.xyz) using the [Flipside Crypto](https://flipsidecrypto.xyz) data.
 
-Here are the links to the queries used for this dashboard:
+SQL queries:
+- Developers: [Overview](https://next.flipsidecrypto.xyz/edit/queries/785522fc-11fd-4653-ba4c-59d97de43fac) | [Daily](https://next.flipsidecrypto.xyz/edit/queries/cee2f6fc-cb23-4c3e-b0a3-b9513c3f51ae) | [Weekly](https://next.flipsidecrypto.xyz/edit/queries/1cd7ee81-f6c2-4f55-93e9-441de0dd74e2) | [Monthly](https://next.flipsidecrypto.xyz/edit/queries/f6ebee22-5bd8-45ee-ab54-dc6b5b5cfe16)
+- New Developers: [Daily](https://next.flipsidecrypto.xyz/edit/queries/64a24714-c19f-4129-9122-c0dcaaf579cd) | [Weekly](https://next.flipsidecrypto.xyz/edit/queries/9676f2a5-7b64-4f1d-8f7d-e1f80045451a) | [Monthly](https://next.flipsidecrypto.xyz/edit/queries/7104e52b-cd6a-449d-8b7d-f35ed6691f92)
 - [Prices](https://next.flipsidecrypto.xyz/edit/queries/60300b70-dd1e-4716-bc75-3bfc5709250f)
 - [Blocks](https://next.flipsidecrypto.xyz/edit/queries/024b2e03-1063-4bcf-a8de-b35d17e01cbd)
 - [Transactions](https://next.flipsidecrypto.xyz/edit/queries/3479cc40-da43-4231-b8e8-c5e62974720d)
