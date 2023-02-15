@@ -27,10 +27,13 @@ def get_data(query):
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/eee5e19b-2632-4fec-b337-e52d85509eb5/data/latest')
     elif query == 'Wallet Balances Whales':
         return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/efb88e24-abba-44e3-ac66-2dfeedb4813b/data/latest')
+    elif query == 'Whales Activities':
+        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/296269d7-65e5-422d-a5f5-b28b65d3bf43/data/latest')
     return None
 
 balances_distribution = get_data('Wallet Balances Distribution')
 balances_whales = get_data('Wallet Balances Whales')
+whales_activities = get_data('Whales Activities')
 whales_types = balances_whales.groupby(['Type']).agg(
     {'Address': 'count', 'Transactions': 'sum', 'Inflows': 'sum', 'Outflows': 'sum', 'Balance': 'sum'}).reset_index()
 
@@ -103,16 +106,9 @@ with tab_whales:
 
     df = balances_whales
     fig = px.bar(df, x='Address', y='Balance', color='Type', title='NEAR Balance of Whales')
-    fig.update_layout(legend_title=False, xaxis_title=None, yaxis_title='Balance', hovermode='x unified')
+    fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Balance', hovermode='x unified')
     fig.update_traces(hovertemplate='%{y:,.0f} NEAR<extra></extra>')
     fig.update_xaxes(type='category', categoryorder='total ascending')
-    st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
-
-    fig = sp.make_subplots()
-    fig.add_trace(go.Bar(x=df['Address'], y=df['Inflows'], name='Inflows', hovertemplate='Inflow: %{y:,.0f} NEAR<extra></extra>'))
-    fig.add_trace(go.Bar(x=df['Address'], y=df['Outflows'], name='Outflows', hovertemplate='Outflow: %{y:,.0f} NEAR<extra></extra>'))
-    fig.update_layout(title_text='NEAR Volume of Inflows and Outflows of Whales', yaxis_title='Volume', hovermode='x unified')
-    fig.update_xaxes(title=None, categoryorder='total ascending')
     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
     st.write(
@@ -125,13 +121,58 @@ with tab_whales:
     )
 
     fig = px.bar(df, x='Address', y='Transactions', color='Type', title='Number of Transactions Conducted by Whales')
-    fig.update_layout(legend_title=False, xaxis_title=None, yaxis_title='Transactions', hovermode='x unified')
+    fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Transactions', hovermode='x unified')
     fig.update_traces(hovertemplate='%{y:,.0f}<extra></extra>')
     fig.update_xaxes(type='category', categoryorder='total ascending')
     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
     with st.expander('**Data Table**', expanded=False):
         st.dataframe(balances_whales, use_container_width=True)
+
+    st.subheader('Token Flow')
+
+    df = whales_activities.groupby('Flow').agg('sum').reset_index()
+    c1, c2 = st.columns(2)
+    with c1:
+        fig = px.pie(df, values='Volume', names='Flow', title='Volume Share of Activities Among Whales')
+        fig.update_layout(legend_title=None, legend_y=0.5)
+        fig.update_traces(textinfo='percent+label', textposition='inside')
+        st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+    with c2:
+        fig = px.pie(df, values='Transactions', names='Flow', title='Transactions Share of Activities Among Whales')
+        fig.update_layout(legend_title=None, legend_y=0.5)
+        fig.update_traces(textinfo='percent+label', textposition='inside')
+        st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+
+    df = balances_whales
+    fig = sp.make_subplots()
+    fig.add_trace(go.Bar(x=df['Address'], y=df['Inflows'], name='Inflows', hovertemplate='Inflow: %{y:,.0f} NEAR<extra></extra>'))
+    fig.add_trace(go.Bar(x=df['Address'], y=df['Outflows'], name='Outflows', hovertemplate='Outflow: %{y:,.0f} NEAR<extra></extra>'))
+    fig.update_layout(title_text='NEAR Volume of Inflows and Outflows of Whales', yaxis_title='Volume', hovermode='x unified')
+    fig.update_xaxes(title=None, categoryorder='total ascending')
+    st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+
+    st.subheader('Activities')
+
+    df = whales_activities.groupby('Action').agg('sum').reset_index()
+    c1, c2 = st.columns(2)
+    with c1:
+        fig = px.pie(df, values='Volume', names='Action', title='Volume Share of Each Activity Among Whales')
+        fig.update_layout(legend_title=None, legend_y=0.5)
+        fig.update_traces(textinfo='percent+label', textposition='inside')
+        st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+    with c2:
+        fig = px.pie(df, values='Transactions', names='Action', title='Transactions Share of Each Activity Among Whales')
+        fig.update_layout(legend_title=None, legend_y=0.5)
+        fig.update_traces(textinfo='percent+label', textposition='inside')
+        st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+
+    df = whales_activities
+    fig = px.bar(df, x='Address', y='Volume', color='Action', custom_data=['Action'], title='Number of Transactions Conducted by Whales')
+    fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Transactions', hovermode='x unified')
+    fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
+    fig.update_xaxes(type='category', categoryorder='total ascending')
+    st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
 with tab_distribution:
     st.subheader('Overview')
