@@ -154,6 +154,13 @@ with tab_whales:
 
     st.subheader('Activities')
 
+    st.write(
+        """
+        The data has also demonstrated that NEAR token transfers, both inbound and outbound, accounted
+        for the majority of the whales' activities.
+        """
+    )
+
     df = whales_activities.groupby('Action').agg('sum').reset_index()
     c1, c2 = st.columns(2)
     with c1:
