@@ -65,7 +65,7 @@ with tab_whales:
             was adjusted to the NEAR data and those wallet addresses with a NEAR balance of more
             than **20M** tokens were selected as the whales.
 
-            The type of whale addresses could be filtered on each chain to limit the output to your desired categories.
+            The type of whale addresses could be filtered on each graph to limit the output to your desired categories.
             """
         )
 
@@ -97,7 +97,7 @@ with tab_whales:
 
     st.write(
         """
-        Based on the methodology used in this dashboard to select the whale addresses, only less than 40
+        Based on the methodology used in this dashboard to select the whale addresses, less than 40
         wallets were fitted to the criteria and were chosen as the whales. As the data shows, the wallet
         `5c33c6218d47e00ef229f60da78d0897e1ee9665312550b8afd5f9c7bc6957d2` has been one of the biggest
         whales with massive NEAR holdings.
