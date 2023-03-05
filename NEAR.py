@@ -69,4 +69,4 @@ with c2:
 with c3:
     st.info('**Data: [Flipside Crypto](https://flipsidecrypto.xyz)**', icon="🧠")
 with c4:
-    st.info('**Bounty Program: [MetricsDAO](https://metricsdao.xyz)**', icon="🏢")
+    st.info('**Bounty Program: [MetricsDAO](https://metricsdao.xyz)**', icon="🏦")
