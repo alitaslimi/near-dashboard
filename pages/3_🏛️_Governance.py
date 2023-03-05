@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.subplots as sp
 import plotly.graph_objects as go
 import PIL
+import data
 
 # Global Variables
 theme_plotly = None # None or streamlit
@@ -21,34 +22,14 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=1000, allow_output_mutation=True)
-def get_data(query):
-    if query == 'Blocks Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/024b2e03-1063-4bcf-a8de-b35d17e01cbd/data/latest')
-    elif query == 'Blocks Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/1d55b381-77a7-4e03-b951-58421139cb09/data/latest')
-    elif query == 'Validators Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/053529d5-6b21-41b9-9a62-32f12ea0532d/data/latest')
-    elif query == 'Validators Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/fca955ff-ade0-4454-95ff-59c733ff846b/data/latest')
-    elif query == 'Validators Actions Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/6a80300f-3a83-4be7-a701-9f3081535fba/data/latest')
-    elif query == 'Validators Actions Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/711833dd-317c-4556-a789-36cdf6cd4b81/data/latest')
-    elif query == 'Validators Staking Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/a07278ef-5126-4642-9694-fd374000d5b1/data/latest')
-    elif query == 'Validators Staking Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/ac94cdae-9791-469e-bf6a-b3b84ca04704/data/latest')
-    return None
-
-blocks_overview = get_data('Blocks Overview')
-blocks_daily = get_data('Blocks Daily')
-validators_overview = get_data('Validators Overview')
-validators_daily = get_data('Validators Daily')
-validators_actions_overview = get_data('Validators Actions Overview')
-validators_actions_daily = get_data('Validators Actions Daily')
-validators_staking_overview = get_data('Validators Staking Overview')
-validators_staking_daily = get_data('Validators Staking Daily')
+blocks_overview = data.get_data('Blocks Overview')
+blocks_daily = data.get_data('Blocks Daily')
+validators_overview = data.get_data('Validators Overview')
+validators_daily = data.get_data('Validators Daily')
+validators_actions_overview = data.get_data('Validators Actions Overview')
+validators_actions_daily = data.get_data('Validators Actions Daily')
+validators_staking_overview = data.get_data('Validators Staking Overview')
+validators_staking_daily = data.get_data('Validators Staking Daily')
 
 # Content
 tab_validators, tab_staking = st.tabs(['**Validators**', '**Staking**'])
@@ -59,21 +40,21 @@ with tab_validators:
 
     st.metric(label='**Total Unique Validators**', value=str(blocks_overview['Validators'].map('{:,.0f}'.format).values[0]))
 
-    c1, c2= st.columns(2)
-    with c1:
-        df = validators_overview.sort_values('Blocks', ascending=False).reset_index(drop=True)
-        df.loc[validators_overview.index >= 15, 'Validator'] = 'Other'
-        fig = px.pie(df, values='Blocks', names='Validator', title='Share of Validated Blocks', hole=0.4)
-        fig.update_layout(legend_title=None, legend_y=0.5)
-        fig.update_traces(textinfo='percent+label', textposition='inside')
-        st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
-    with c2:
-        df = validators_overview.sort_values('Transactions', ascending=False).reset_index(drop=True)
-        df.loc[validators_overview.index >= 15, 'Validator'] = 'Other'
-        fig = px.pie(df, values='Transactions', names='Validator', title='Share of Validated Transactions', hole=0.4)
-        fig.update_layout(legend_title=None, legend_y=0.5)
-        fig.update_traces(textinfo='percent+label', textposition='inside')
-        st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+    # c1, c2= st.columns(2)
+    # with c1:
+    df = validators_overview.sort_values('Blocks', ascending=False).reset_index(drop=True)
+    df.loc[validators_overview.index >= 15, 'Validator'] = 'Other'
+    fig = px.pie(df, values='Blocks', names='Validator', title='Share of Validated Blocks', hole=0.4)
+    fig.update_layout(legend_title=None, legend_y=0.5)
+    fig.update_traces(textinfo='percent+label', textposition='inside')
+    st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+    # with c2:
+    #     df = validators_overview.sort_values('Transactions', ascending=False).reset_index(drop=True)
+    #     df.loc[validators_overview.index >= 15, 'Validator'] = 'Other'
+    #     fig = px.pie(df, values='Transactions', names='Validator', title='Share of Validated Transactions', hole=0.4)
+    #     fig.update_layout(legend_title=None, legend_y=0.5)
+    #     fig.update_traces(textinfo='percent+label', textposition='inside')
+    #     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
     st.subheader('Activity Over Time')
 
@@ -115,10 +96,10 @@ with tab_validators:
         fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
         st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
-        fig = px.bar(df.sort_values(['Date', 'Transactions'], ascending=[True, False]), x='Date', y='Transactions', color='Validator', custom_data=['Validator'], title='Validated Transactions of Top Validators Over Time')
-        fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Transactions', hovermode='x unified')
-        fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
-        st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+        # fig = px.bar(df.sort_values(['Date', 'Transactions'], ascending=[True, False]), x='Date', y='Transactions', color='Validator', custom_data=['Validator'], title='Validated Transactions of Top Validators Over Time')
+        # fig.update_layout(legend_title=None, xaxis_title=None, yaxis_title='Transactions', hovermode='x unified')
+        # fig.update_traces(hovertemplate='%{customdata}: %{y:,.0f}<extra></extra>')
+        # st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
     with c2:
         fig = go.Figure()
         for i in df['Validator'].unique():
@@ -133,18 +114,18 @@ with tab_validators:
         fig.update_layout(title='Share of Validated Blocks of Top Validators Over Time')
         st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
         
-        fig = go.Figure()
-        for i in df['Validator'].unique():
-            fig.add_trace(go.Scatter(
-                name=i,
-                x=df.query("Validator == @i")['Date'],
-                y=df.query("Validator == @i")['Transactions'],
-                mode='lines',
-                stackgroup='one',
-                groupnorm='percent'
-            ))
-        fig.update_layout(title='Share of Validated Transactions of Top Validators Over Time')
-        st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
+        # fig = go.Figure()
+        # for i in df['Validator'].unique():
+        #     fig.add_trace(go.Scatter(
+        #         name=i,
+        #         x=df.query("Validator == @i")['Date'],
+        #         y=df.query("Validator == @i")['Transactions'],
+        #         mode='lines',
+        #         stackgroup='one',
+        #         groupnorm='percent'
+        #     ))
+        # fig.update_layout(title='Share of Validated Transactions of Top Validators Over Time')
+        # st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
 with tab_staking:
 

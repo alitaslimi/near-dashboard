@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import PIL
+import data
 
 # Global Variables
 theme_plotly = None # None or streamlit
@@ -19,22 +20,10 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=1000, allow_output_mutation=True)
-def get_data(query):
-    if query == 'Contracts Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/6eb672c4-e52a-43c1-822f-a1e43cb52b10/data/latest')
-    elif query == 'Contracts Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/cd150022-71ff-4d0b-8a79-53d1de1ec0b2/data/latest')
-    elif query == 'Contracts Interactions Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/646055c7-cb50-4933-b897-b2939d328c07/data/latest')
-    elif query == 'Contracts Interactions Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/baa3c16c-8861-4dfb-99e8-d5fa5d3097ec/data/latest')
-    return None
-
-contracts_overview = get_data('Contracts Overview')
-contracts_daily = get_data('Contracts Daily')
-contracts_interactions_overview = get_data('Contracts Interactions Overview')
-contracts_interactions_daily = get_data('Contracts Interactions Daily')
+contracts_overview = data.get_data('Contracts Overview')
+contracts_daily = data.get_data('Contracts Daily')
+contracts_interactions_overview = data.get_data('Contracts Interactions Overview')
+contracts_interactions_daily = data.get_data('Contracts Interactions Daily')
 
 # Content
 st.subheader('Overview')

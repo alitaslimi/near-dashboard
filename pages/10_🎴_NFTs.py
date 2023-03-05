@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.subplots as sp
 import plotly.graph_objects as go
 import PIL
+import data
 
 # Global Variables
 theme_plotly = None # None or streamlit
@@ -22,31 +23,13 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=1000, allow_output_mutation=True)
-def get_data(query):
-    if query == 'NFTs Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/90bb096b-e1eb-4b6b-9aab-d74a6d1cf0e8/data/latest')
-    elif query == 'NFTs Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/e107f8ba-bf27-493d-9c59-c83314007bdb/data/latest')
-    elif query == 'NFTs Heatmap':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/92e6c337-9045-4f98-94ff-28ecc7285d92/data/latest')
-    elif query == 'NFTs Marketplaces Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/f810cf3b-bfdd-4945-a416-84aa1c650433/data/latest')
-    elif query == 'NFTs Marketplaces Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/eacf6eca-444c-48a9-9017-632bcbe63e82/data/latest')
-    elif query == 'NFTs Collections Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/7db40092-0ef8-4091-9cba-b617846e1642/data/latest')
-    elif query == 'NFTs Collections Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/252137a6-5992-4ea7-b625-5b6d8847c45b/data/latest')
-    return None
-
-nfts_overview = get_data('NFTs Overview')
-nfts_daily = get_data('NFTs Daily')
-nfts_heatmap = get_data('NFTs Heatmap')
-nfts_marketplaces_overview = get_data('NFTs Marketplaces Overview')
-nfts_marketplaces_daily = get_data('NFTs Marketplaces Daily')
-nfts_collections_overview = get_data('NFTs Collections Overview')
-nfts_collections_daily = get_data('NFTs Collections Daily')
+nfts_overview = data.get_data('NFTs Overview')
+nfts_daily = data.get_data('NFTs Daily')
+nfts_heatmap = data.get_data('NFTs Heatmap')
+nfts_marketplaces_overview = data.get_data('NFTs Marketplaces Overview')
+nfts_marketplaces_daily = data.get_data('NFTs Marketplaces Daily')
+nfts_collections_overview = data.get_data('NFTs Collections Overview')
+nfts_collections_daily = data.get_data('NFTs Collections Daily')
 
 # Content
 tab_overview, tab_heatmap, tab_marketplaces, tab_collections = st.tabs(['**Overview**', '**Heatmap**', '**Marketplaces**', '**Collections**'])

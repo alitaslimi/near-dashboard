@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.subplots as sp
 import plotly.graph_objects as go
 import PIL
+import data
 
 # Global Variables
 theme_plotly = None # None or streamlit
@@ -24,37 +25,15 @@ with open('style.css')as f:
 theme_plotly = None # None or streamlit
 
 # Data Sources
-@st.cache(ttl=1000, allow_output_mutation=True)
-def get_data(query):
-    if query == 'Swaps Overview':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/18f8dc36-dc82-45ce-8ffb-563ac0122407/data/latest')
-    elif query == 'Swaps Daily':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/c3237ea2-2027-4b28-b47c-00e0a62cba07/data/latest')
-    elif query == 'Swaps Heatmap':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/b6561ad9-7ee3-4126-95f3-1c423df8b1a9/data/latest')
-    elif query == 'Swaps DEXs Overview':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/b3948af5-0d86-4609-b4c3-d45b8454ca8b/data/latest')
-    elif query == 'Swaps DEXs Daily':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/362dc974-4449-49ef-85e2-7e60b2170831/data/latest')
-    elif query == 'Swaps Asset Types Overview':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/f7f75d73-aea2-4616-9840-416de08e7fa6/data/latest')
-    elif query == 'Swaps Asset Types Daily':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/a558f0f1-3d95-47ee-a58c-1132bb2d8034/data/latest')
-    elif query == 'Swaps Assets Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/c8305309-2276-4a8d-8871-0cd66fc22203/data/latest')
-    elif query == 'Swaps Assets Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/068e71ce-7767-437a-8ff3-45e94a354714/data/latest')
-    return None
-
-swaps_overview = get_data('Swaps Overview')
-swaps_daily = get_data('Swaps Daily')
-swaps_heatmap = get_data('Swaps Heatmap')
-swaps_dexs_overview = get_data('Swaps DEXs Overview')
-swaps_dexs_daily = get_data('Swaps DEXs Daily')
-swaps_asset_types_overview = get_data('Swaps Asset Types Overview')
-swaps_asset_types_daily = get_data('Swaps Asset Types Daily')
-swaps_assets_overview = get_data('Swaps Assets Overview')
-swaps_assets_daily = get_data('Swaps Assets Daily')
+swaps_overview = data.get_data('Swaps Overview')
+swaps_daily = data.get_data('Swaps Daily')
+swaps_heatmap = data.get_data('Swaps Heatmap')
+swaps_dexs_overview = data.get_data('Swaps DEXs Overview')
+swaps_dexs_daily = data.get_data('Swaps DEXs Daily')
+swaps_asset_types_overview = data.get_data('Swaps Asset Types Overview')
+swaps_asset_types_daily = data.get_data('Swaps Asset Types Daily')
+swaps_assets_overview = data.get_data('Swaps Assets Overview')
+swaps_assets_daily = data.get_data('Swaps Assets Daily')
 
 # Content
 tab_overview, tab_heatmap, tab_dexs, tab_asset_types, tab_assets = st.tabs(['**Overview**', '**Heatmap**', '**DEXs**', '**Asset Types**', '**Assets**'])

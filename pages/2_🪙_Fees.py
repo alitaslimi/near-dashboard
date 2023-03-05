@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.subplots as sp
 import plotly.graph_objects as go
 import PIL
+import data
 
 # Global Variables
 theme_plotly = None # None or streamlit
@@ -22,19 +23,9 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=1000, allow_output_mutation=True)
-def get_data(query):
-    if query == 'Transactions Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/3479cc40-da43-4231-b8e8-c5e62974720d/data/latest')
-    elif query == 'Transactions Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/c984af6f-5955-45f4-bffd-2bab056ee78f/data/latest')
-    elif query == 'Transactions Heatmap':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/f0f4e88d-4c8c-4ed8-acf9-ccbd213bcec1/data/latest')
-    return None
-
-transactions_overview = get_data('Transactions Overview')
-transactions_daily = get_data('Transactions Daily')
-transactions_heatmap = get_data('Transactions Heatmap')
+transactions_overview = data.get_data('Transactions Overview')
+transactions_daily = data.get_data('Transactions Daily')
+transactions_heatmap = data.get_data('Transactions Heatmap')
 
 # Content
 tab_overview, tab_heatmap = st.tabs(['**Overview**', '**Heatmap**'])

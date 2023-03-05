@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.subplots as sp
 import plotly.graph_objects as go
 import PIL
+import data
 
 # Global Variables
 theme_plotly = None # None or streamlit
@@ -22,34 +23,14 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=1000, allow_output_mutation=True)
-def get_data(query):
-    if query == 'Prices Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/60300b70-dd1e-4716-bc75-3bfc5709250f/data/latest')
-    elif query == 'Blocks Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/024b2e03-1063-4bcf-a8de-b35d17e01cbd/data/latest')
-    elif query == 'Blocks Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/1d55b381-77a7-4e03-b951-58421139cb09/data/latest')
-    elif query == 'Transactions Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/3479cc40-da43-4231-b8e8-c5e62974720d/data/latest')
-    elif query == 'Transactions Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/c984af6f-5955-45f4-bffd-2bab056ee78f/data/latest')
-    elif query == 'Transactions Heatmap':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/f0f4e88d-4c8c-4ed8-acf9-ccbd213bcec1/data/latest')
-    elif query == 'Transactions Status Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/bb9626e1-16ac-49dc-a101-54622b0bc96c/data/latest')
-    elif query == 'Transactions Status Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/1979b40a-c981-486f-a4b6-ca774cc835f5/data/latest')
-    return None
-
-prices_daily = get_data('Prices Daily')
-blocks_overview = get_data('Blocks Overview')
-blocks_daily = get_data('Blocks Daily')
-transactions_overview = get_data('Transactions Overview')
-transactions_daily = get_data('Transactions Daily')
-transactions_heatmap = get_data('Transactions Heatmap')
-transactions_status_overview = get_data('Transactions Status Overview')
-transactions_status_daily = get_data('Transactions Status Daily')
+prices_daily = data.get_data('Prices Daily')
+blocks_overview = data.get_data('Blocks Overview')
+blocks_daily = data.get_data('Blocks Daily')
+transactions_overview = data.get_data('Transactions Overview')
+transactions_daily = data.get_data('Transactions Daily')
+transactions_heatmap = data.get_data('Transactions Heatmap')
+transactions_status_overview = data.get_data('Transactions Status Overview')
+transactions_status_daily = data.get_data('Transactions Status Daily')
 
 # Content
 tab_overview, tab_heatmap, tab_status = st.tabs(['**Overview**', '**Heatmap**', '**Success Rate**'])

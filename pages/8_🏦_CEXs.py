@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import PIL
+import data
 
 # Global Variables
 theme_plotly = None # None or streamlit
@@ -19,19 +20,9 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=1000, allow_output_mutation=True)
-def get_data(query):
-    if query == 'CEXs Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/3c4330b0-36d2-4016-a092-1fb72b414f80/data/latest')
-    elif query == 'CEXs Exchanges Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/ea5814fb-ba21-4b01-9e12-0d44f25980a8/data/latest')
-    elif query == 'CEXs Exchanges Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/84fc0987-4902-4295-82de-dbdcf0703660/data/latest')
-    return None
-
-cexs_overview = get_data('CEXs Overview')
-cexs_exchanges_overview = get_data('CEXs Exchanges Overview')
-cexs_exchanges_daily = get_data('CEXs Exchanges Daily')
+cexs_overview = data.get_data('CEXs Overview')
+cexs_exchanges_overview = data.get_data('CEXs Exchanges Overview')
+cexs_exchanges_daily = data.get_data('CEXs Exchanges Daily')
 
 # Content
 st.subheader('Overview')

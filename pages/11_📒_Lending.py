@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.subplots as sp
 import plotly.graph_objects as go
 import PIL
+import data
 
 # Global Variables
 theme_plotly = None # None or streamlit
@@ -21,25 +22,11 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=1000, allow_output_mutation=True)
-def get_data(query):
-    if query == 'Burrow Netflow':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/215ed4b5-e745-42f9-be3c-87b724ffa22a/data/latest')
-    elif query == 'Burrow Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/8eb9c5ea-e4bc-41cf-97c4-30e319ffc0cf/data/latest')
-    elif query == 'Burrow Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/87b41b8b-450b-41d0-b529-fb42e44cd328/data/latest')
-    elif query == 'Burrow Liquidity Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/f60ab852-fe85-48da-b71a-7022874b661b/data/latest')
-    elif query == 'Burrow Liquidity Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/78d406b6-ab8d-4ee4-8d90-6943965badbd/data/latest')
-    return None
-
-burrow_netflow = get_data('Burrow Netflow')
-burrow_overview = get_data('Burrow Overview')
-burrow_daily = get_data('Burrow Daily')
-burrow_liquidity_overview = get_data('Burrow Liquidity Overview')
-burrow_liquidity_daily = get_data('Burrow Liquidity Daily')
+burrow_netflow = data.get_data('Burrow Netflow')
+burrow_overview = data.get_data('Burrow Overview')
+burrow_daily = data.get_data('Burrow Daily')
+burrow_liquidity_overview = data.get_data('Burrow Liquidity Overview')
+burrow_liquidity_daily = data.get_data('Burrow Liquidity Daily')
 
 st.subheader('Overview of Burrow')
 

@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.subplots as sp
 import plotly.graph_objects as go
 import PIL
+import data
 
 # Global Variables
 theme_plotly = None # None or streamlit
@@ -21,19 +22,9 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=1000, allow_output_mutation=True)
-def get_data(query):
-    if query == 'Wallet Balances Distribution':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/eee5e19b-2632-4fec-b337-e52d85509eb5/data/latest')
-    elif query == 'Wallet Balances Whales':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/efb88e24-abba-44e3-ac66-2dfeedb4813b/data/latest')
-    elif query == 'Whales Activities':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/296269d7-65e5-422d-a5f5-b28b65d3bf43/data/latest')
-    return None
-
-balances_distribution = get_data('Wallet Balances Distribution')
-balances_whales = get_data('Wallet Balances Whales')
-whales_activities = get_data('Whales Activities')
+balances_distribution = data.get_data('Wallet Balances Distribution')
+balances_whales = data.get_data('Wallet Balances Whales')
+whales_activities = data.get_data('Whales Activities')
 whales_types = balances_whales.groupby(['Type']).agg(
     {'Address': 'count', 'Transactions': 'sum', 'Inflows': 'sum', 'Outflows': 'sum', 'Balance': 'sum'}).reset_index()
 
@@ -65,7 +56,7 @@ with tab_whales:
             was adjusted to the NEAR data and those wallet addresses with a NEAR balance of more
             than **20M** tokens were selected as the whales.
 
-            The type of whale addresses could be filtered on each graph to limit the output to your desired categories.
+            The type of whale addresses could be filtered on each chain to limit the output to your desired categories.
             """
         )
 
@@ -97,7 +88,7 @@ with tab_whales:
 
     st.write(
         """
-        Based on the methodology used in this dashboard to select the whale addresses, less than 40
+        Based on the methodology used in this dashboard to select the whale addresses, only less than 40
         wallets were fitted to the criteria and were chosen as the whales. As the data shows, the wallet
         `5c33c6218d47e00ef229f60da78d0897e1ee9665312550b8afd5f9c7bc6957d2` has been one of the biggest
         whales with massive NEAR holdings.

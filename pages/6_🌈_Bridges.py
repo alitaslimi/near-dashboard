@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.subplots as sp
 import plotly.graph_objects as go
 import PIL
+import data
 
 # Global Variables
 theme_plotly = None # None or streamlit
@@ -21,22 +22,10 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=1000, allow_output_mutation=True)
-def get_data(query):
-    if query == 'Bridges Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/4e31e12c-bf4e-40c7-b81b-68927d9d537a/data/latest')
-    elif query == 'Bridges Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/fea096a4-db6d-48ec-abab-28966966137f/data/latest')
-    elif query == 'Bridges Tokens Overview':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/137df1be-0ba5-4cdb-9764-bb6935f73e27/data/latest')
-    elif query == 'Bridges Tokens Daily':
-        return pd.read_json('https://api.flipsidecrypto.com/api/v2/queries/85db43ba-7b4a-40c8-a805-2759be0b4623/data/latest')
-    return None
-
-bridges_overview = get_data('Bridges Overview')
-bridges_daily = get_data('Bridges Daily')
-bridges_tokens_overview = get_data('Bridges Tokens Overview')
-bridges_tokens_daily = get_data('Bridges Tokens Daily')
+bridges_overview = data.get_data('Bridges Overview')
+bridges_daily = data.get_data('Bridges Daily')
+bridges_tokens_overview = data.get_data('Bridges Tokens Overview')
+bridges_tokens_daily = data.get_data('Bridges Tokens Daily')
 
 # Content
 tab_overview, tab_tokens = st.tabs(['**Overview**', '**Tokens**'])

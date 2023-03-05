@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.subplots as sp
 import plotly.graph_objects as go
 import PIL
+import data
 
 # Global Variables
 theme_plotly = None # None or streamlit
@@ -22,28 +23,12 @@ with open('style.css')as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
 
 # Data Sources
-@st.cache(ttl=1000, allow_output_mutation=True)
-def get_data(query):
-    if query == 'Transfers Overview':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/748dc207-2309-4afb-8b09-9e979aa6007f/data/latest')
-    elif query == 'Transfers Daily':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/e4353f8e-2e61-486e-8d7f-d5bf05d9bfed/data/latest')
-    elif query == 'Transfers Heatmap':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/9135ad92-3e0c-4c07-9af8-905f204533eb/data/latest')
-    elif query == 'Transfers Distribution':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/a17c8548-2834-4600-bc78-a0efb6d12de4/data/latest')
-    elif query == 'Transfers Assets Overview':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/c14f77c5-76be-4fc1-8e50-595462b36f64/data/latest')
-    elif query == 'Transfers Assets Daily':
-        return pd.read_json('https://node-api.flipsidecrypto.com/api/v2/queries/c1e767c2-3601-43e4-b159-f5fb8efbedfb/data/latest')
-    return None
-
-transfers_overview = get_data('Transfers Overview')
-transfers_daily = get_data('Transfers Daily')
-transfers_heatmap = get_data('Transfers Heatmap')
-transfers_distribution = get_data('Transfers Distribution')
-transfers_assets_overview = get_data('Transfers Assets Overview')
-transfers_assets_daily = get_data('Transfers Assets Daily')
+transfers_overview = data.get_data('Transfers Overview')
+transfers_daily = data.get_data('Transfers Daily')
+transfers_heatmap = data.get_data('Transfers Heatmap')
+transfers_distribution = data.get_data('Transfers Distribution')
+transfers_assets_overview = data.get_data('Transfers Assets Overview')
+transfers_assets_daily = data.get_data('Transfers Assets Daily')
 
 # Content
 tab_overview, tab_heatmap, tab_assets = st.tabs(['**Overview**', '**Heatmap**', '**Assets**'])
