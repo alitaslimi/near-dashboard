@@ -69,6 +69,39 @@ with st.expander('**Methodology**'):
         The data for this dashboard was imported from the [**Flipside Crypto**](https://flipsidecrypto.xyz)
         data platform by using its **REST API**. The code for this report is saved and accessible in the
         **pages** directory of the app's [**GitHub Repository**](https://github.com/alitaslimi/near-dashboard).
+
+        Here are the links to the SQL queries:
+        
+        **Overview**:
+        [NEAR Social Overview](https://flipsidecrypto.xyz/edit/queries/7dfa5093-2701-4134-aba2-2645e1885e52) |
+        [NEAR Social Daily](https://flipsidecrypto.xyz/edit/queries/bd7034cd-4056-47da-ad26-8fa5ef4b2c4e)
+
+        **Profiles**:
+        [Changes Overview](https://flipsidecrypto.xyz/edit/queries/2e507b1d-5e0a-40f2-8f1a-96a5962795ae) |
+        [Changes Daily](https://flipsidecrypto.xyz/edit/queries/a66106f1-6349-48f1-8afe-a9bcc0146ff3) |
+        [Tags Overview](https://flipsidecrypto.xyz/edit/queries/a19cd13f-5d61-4750-8b7f-efc3024d59d5) |
+        [Tags Daily](https://flipsidecrypto.xyz/edit/queries/52070e5e-cbc4-45e4-95ce-35be6bd9b856) |
+        [Linktree Overview](https://flipsidecrypto.xyz/edit/queries/f0bc3334-7c2a-426e-a243-2665adb9b57e) |
+        [Linktree Daily](https://flipsidecrypto.xyz/edit/queries/37e88d51-9121-443d-a482-b6f3d40e2e2d) |
+        [Image Overview](https://flipsidecrypto.xyz/edit/queries/b8f691a2-bebf-4711-a98f-43c01ca0c4ae) |
+        [Image Daily](https://flipsidecrypto.xyz/edit/queries/e81bfbad-f31d-4b8a-b002-843d3cf0b5c9) |
+        [NFTs Overview](https://flipsidecrypto.xyz/edit/queries/d0c5ef3b-f173-4b35-b81e-ac109e96b66d)
+
+        **Activities**:
+        [Actions Overview](https://flipsidecrypto.xyz/edit/queries/ecd84aac-038b-4d96-8733-e5dca7525ad8) |
+        [Actions Daily](https://flipsidecrypto.xyz/edit/queries/fd67cbff-6180-42de-b0f5-575f77668aa1) |
+        [Activity Overview](https://flipsidecrypto.xyz/edit/queries/3fd04ee6-1d12-41e8-9fe9-98213907078c) |
+        [Activity Daily](https://flipsidecrypto.xyz/edit/queries/9a727f42-ebdf-4998-8890-9429d6b9469e) |
+        [Active Users](https://flipsidecrypto.xyz/edit/queries/0221868e-b0d9-4f0f-99c8-3a79aa2692d7)
+
+        **Followings**:
+        [Following Daily](https://flipsidecrypto.xyz/edit/queries/0824497f-a8c0-4869-a922-c786196398a7) |
+        [Following Counts](https://flipsidecrypto.xyz/edit/queries/6582612a-2527-4129-9770-62690e188bc5)
+
+        **Widgets**:
+        [Widgets Overview](https://flipsidecrypto.xyz/edit/queries/b51c9aee-7c4f-43d9-b015-564f28b25545) |
+        [Widgets Daily](https://flipsidecrypto.xyz/edit/queries/204b47f7-a3dc-4b22-88d9-8742360281d9) |
+        [Widgets Creators](https://flipsidecrypto.xyz/edit/queries/04675497-866c-406e-b522-0ada2c2a44f7)
         """
     )
 
@@ -89,7 +122,7 @@ with tab_overview:
     df = social_overview
     c1, c2, c3, c4 = st.columns(4)
     with c1:
-        st.metric(label='**Total Conducted Actions**', value=str(df['Actions'].map('{:,.0f}'.format).values[0]))
+        st.metric(label='**Total User Interactions**', value=str(df['Actions'].map('{:,.0f}'.format).values[0]))
     with c2:
         st.metric(label='**Total Profile Changes**', value=str(df['Changes'].map('{:,.0f}'.format).values[0]))
     with c3:
@@ -115,6 +148,14 @@ with tab_overview:
 
 with tab_profiles:
     st.subheader('Profile Changes')
+
+    st.write(
+        """
+        The profile changes data by each section demonstrated that users applied changes to different
+        sections almost equally, which in turn shows their interest in updating different aspects of
+        their profile.
+        """
+    )
 
     df = profile_changes_overview
     c1, c2 = st.columns(2)
@@ -175,10 +216,13 @@ with tab_profiles:
     st.subheader('Profile Sections')
     st.write(
         """
-        **Tags**
-        
         This segment covers the individual section of each user's profile to determine the most popular
         tags, other social networks, and profile images among users.
+
+        **Tags**
+        
+        Among the numerous tags used in the profile of users, Learner, Web3, and Near have had the highest
+        usage.
         """
     )
 
@@ -229,8 +273,10 @@ with tab_profiles:
         **Profile Image**
 
         The data shows that more than 75% of users have uploaded their profile image, while
-        less than 10% of them used a URL for their image. Interestingly, a portion of the users
-        used their NEAR NFTs as their profile images.
+        less than 10% of them used a URL for their image. Interestingly, some of the users
+        set their NEAR NFTs as their profile images. Among them, the (L)Earner NFT collection
+        has been the most popular collection with more than 50% of users having these NFTs as
+        their Profile picture.
         """
     )
 
@@ -349,23 +395,33 @@ with tab_activities:
         st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
 
     st.subheader('Most Active Users')
+
+    st.write(
+        """
+        Among the users, `auroraecosystemnews.near` and 'mob.near' have been the top posters with more
+        than 50 posts each. On the other hand, `hypefairy.near` and `mr27.near` have been the two users
+        with the highest number of comments by far compared to others. The number of likes has been
+        much more closer between different users and `meta-pool-official.near` and `duocelot.near`
+        have liked the most with more than 250 each. 
+        """
+    )
     
     c1, c2, c3 = st.columns(3)
     with c1:
-        df = social_active_users.query("Action == 'Post'").sort_values('Transactions', ascending=False).head(20)
-        fig = px.bar(df, x='User', y='Transactions', color='User', title='Users With the Highest Number of Posts')
+        df = social_active_users.sort_values('Posts', ascending=False).head(20)
+        fig = px.bar(df, x='User', y='Posts', color='User', title='Users With the Highest Number of Posts')
         fig.update_layout(showlegend=False, xaxis_title=None, yaxis_title='Posts', xaxis={'categoryorder':'total ascending'}, hovermode='x unified')
         fig.update_traces(hovertemplate='Posts: %{y:,.0f}<extra></extra>')
         st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
     with c2:
-        df = social_active_users.query("Action == 'Comment'").sort_values('Transactions', ascending=False).head(20)
-        fig = px.bar(df, x='User', y='Transactions', color='User', title='Users With the Highest Number of Comments')
+        df = social_active_users.sort_values('Comments', ascending=False).head(20)
+        fig = px.bar(df, x='User', y='Comments', color='User', title='Users With the Highest Number of Comments')
         fig.update_layout(showlegend=False, xaxis_title=None, yaxis_title='Comments', xaxis={'categoryorder':'total ascending'}, hovermode='x unified')
         fig.update_traces(hovertemplate='Comments: %{y:,.0f}<extra></extra>')
         st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
     with c3:
-        df = social_active_users.query("Action == 'Like'").sort_values('Transactions', ascending=False).head(20)
-        fig = px.bar(df, x='User', y='Transactions', color='User', title='Users With the Highest Number of Likes')
+        df = social_active_users.sort_values('Likes', ascending=False).head(20)
+        fig = px.bar(df, x='User', y='Likes', color='User', title='Users With the Highest Number of Likes')
         fig.update_layout(showlegend=False, xaxis_title=None, yaxis_title='Likes', xaxis={'categoryorder':'total ascending'}, hovermode='x unified')
         fig.update_traces(hovertemplate='Likes: %{y:,.0f}<extra></extra>')
         st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
@@ -414,8 +470,8 @@ with tab_widgets:
 
     df = social_widgets_daily
     fig = sp.make_subplots()
-    fig.add_trace(go.Bar(x=df['Date'], y=df['Widgets'], name='Active', hovertemplate='Widgets: %{y:,.0f}<extra></extra>'))
-    fig.add_trace(go.Line(x=df['Date'], y=df['Creators'], name='New', hovertemplate='Creators: %{y:,.0f}<extra></extra>'))
+    fig.add_trace(go.Bar(x=df['Date'], y=df['Widgets'], name='Widgets', hovertemplate='Widgets: %{y:,.0f}<extra></extra>'))
+    fig.add_trace(go.Line(x=df['Date'], y=df['Creators'], name='Creators', hovertemplate='Creators: %{y:,.0f}<extra></extra>'))
     fig.update_layout(title_text='Daily Number of Widgets Created and Users Creating Them', hovermode='x unified')
     fig.update_yaxes(title_text='Number', rangemode='tozero')
     st.plotly_chart(fig, use_container_width=True, theme=theme_plotly)
@@ -437,8 +493,11 @@ st.write(
     Activity on NEAR Social has slowly but surely been increasing since its launch, especially in
     March 2023 when a surge of new users came into the platform. Adding new features and enabling
     users to create widgets, in addition to integrating NFTs as their PFP, helped the social network
-    see growth in user engagement. The numbers are not insane, but its prospect seems promising for
-    the whole NEAR ecosystem.
+    see growth in user engagement. The (L)Earner NFT collection community has been one of the most
+    active NEAR communities with a relatively high user engagement. Also, users like mob.near have
+    massively helped the network's growth by constantly developing widgets and creating content.
+    Overall, the numbers on the network are not insane, but its prospect seems promising for the
+    whole NEAR ecosystem.
     """
 )
 
