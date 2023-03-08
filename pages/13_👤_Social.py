@@ -398,7 +398,7 @@ with tab_activities:
 
     st.write(
         """
-        Among the users, `auroraecosystemnews.near` and 'mob.near' have been the top posters with more
+        Among the users, `auroraecosystemnews.near` and `mob.near` have been the top posters with more
         than 50 posts each. On the other hand, `hypefairy.near` and `mr27.near` have been the two users
         with the highest number of comments by far compared to others. The number of likes has been
         much more closer between different users and `meta-pool-official.near` and `duocelot.near`
@@ -457,6 +457,13 @@ with tab_followings:
         st.dataframe(social_following_counts, use_container_width=True)
 
 with tab_widgets:
+    st.write(
+        """
+        Widgets are like reusable tools network users are able to create for others to take
+        advantage of. They can be updated or forked by other users to improve their performance.
+        """
+    )
+
     st.subheader('Overview')
 
     df = social_widgets_overview
@@ -496,7 +503,7 @@ st.write(
     see growth in user engagement. The (L)Earner NFT collection community has been one of the most
     active NEAR communities with a relatively high user engagement. Also, users like mob.near have
     massively helped the network's growth by constantly developing widgets and creating content.
-    Overall, the numbers on the network are not insane, but its prospect seems promising for the
+    Overall, the numbers on the network are not insane, but the prospect seems promising for the
     whole NEAR ecosystem.
     """
 )
