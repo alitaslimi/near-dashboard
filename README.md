@@ -1,7 +1,7 @@
 # NEAR Mega Dashboard
 This [NEAR Protocol Mega Dashboard](https://alitaslimi-near.streamlit.app) was originally created for [MetricsDAO](https://metricsdao.xyz) using the [Flipside Crypto](https://flipsidecrypto.xyz) data.
 
-# NEAR Social SQL queries
+## NEAR Social SQL queries
         
 **Overview**:
 [NEAR Social Overview](https://flipsidecrypto.xyz/edit/queries/7dfa5093-2701-4134-aba2-2645e1885e52) |
